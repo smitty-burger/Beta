@@ -410,7 +410,21 @@ int board::move_agent_h()
 		<< "\nQ -> Quit" << endl;
 	int boo = 0;
 	int dist;
-
+	if (y_pos[0] == goal_pos[1] + 1 ||
+		y_pos[0] == goal_pos[1] - 1 ||
+		y_pos[0] == goal_pos[1])	// Create Walls
+	{
+		if (x_pos[0] == goal_pos[1] - 1 ||
+			x_pos[0] == goal_pos[1])
+		{
+			if (reward_sys[x_pos[0]][y_pos[0]] != 100)
+			{
+				x_pos.pop_front();
+				y_pos.pop_front();
+				move_count--;
+			}
+		}
+	}
 	if (x_pos[0] != goal_pos[1])
 	{
 		dist = goal_pos[1] - x_pos[0];
@@ -719,7 +733,7 @@ int board::Q_L()
 	*/
 	if ((double)loop_cd / (double)loop_num <= 0.1)
 	{
-	epsilon = 0.005;
+	epsilon = 0.05;
 	}
 	//*/
 
@@ -761,6 +775,20 @@ int board::Q_L()
 	{
 		x_pos.pop_front();
 		y_pos.pop_front();
+	}
+	else if (y_pos[0] == goal_pos[1] + 1 || 
+			 y_pos[0] == goal_pos[1] - 1 ||
+		 	 y_pos[0] == goal_pos[1] )	// Create Walls
+	{
+		if (x_pos[0] == goal_pos[1] -1 ||
+			x_pos[0] == goal_pos[1] )
+		{
+			if (reward_sys[x_pos[0]][y_pos[0]] != 100)
+			{
+				x_pos.pop_front();
+				y_pos.pop_front();
+			}
+		}
 	}
 	else
 	{
